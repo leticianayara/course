@@ -1,4 +1,4 @@
-package com.example.course.serviices;
+package com.example.course.services;
 
 import java.util.List;
 import java.util.Optional;
