@@ -2,9 +2,9 @@ package com.example.course.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.example.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -19,7 +19,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 
 @Entity
@@ -47,10 +46,8 @@ public class Order implements Serializable{
 	@JoinColumn(name = "payment_id")
 	private Payment payment;
 	
-	@Transient
-	@JsonIgnore
-	@OneToMany(mappedBy = "order")
-	private List<OrderItem> orders;
+	@OneToMany(mappedBy = "id.order")
+	private Set<OrderItem> orders = new HashSet<>();
 	
 	public Order() {
 		super();
@@ -62,7 +59,6 @@ public class Order implements Serializable{
 		this.moment = moment;
 		setOrderStatus(orderStatus);
 		this.client = client;
-		this.orders = new ArrayList<>();
 	}
 
 	public Long getId() {
@@ -107,11 +103,11 @@ public class Order implements Serializable{
 		this.payment = payment;
 	}
 
-	public List<OrderItem> getOrders() {
+	public Set<OrderItem> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(List<OrderItem> orders) {
+	public void setOrders(Set<OrderItem> orders) {
 		this.orders = orders;
 	}
 
