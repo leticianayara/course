@@ -19,6 +19,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 
 @Entity
@@ -46,6 +47,7 @@ public class Order implements Serializable{
 	@JoinColumn(name = "payment_id")
 	private Payment payment;
 	
+	@Transient
 	@JsonIgnore
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> orders;
