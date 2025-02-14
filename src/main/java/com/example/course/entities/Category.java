@@ -1,9 +1,9 @@
 package com.example.course.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_category")
@@ -25,9 +26,10 @@ public class Category implements Serializable{
 	private Long id;
 	private String name;
 	
+	@Transient
 	@JsonIgnore
-	@OneToMany(mappedBy = "category")
-	private List<Product> products;
+	@OneToMany(mappedBy = "categories")
+	private Set<Product> products = new HashSet<>();
 	
 	public Category() {
 	}
@@ -35,7 +37,6 @@ public class Category implements Serializable{
 	public Category(Long id, String name) {
 		this.id = id;
 		this.name = name;
-		this.products = new ArrayList<>();
 	}
 
 	public Long getId() {
@@ -54,12 +55,8 @@ public class Category implements Serializable{
 		this.name = name;
 	}
 
-	public List<Product> getProducts() {
+	public Set<Product> getProducts() {
 		return products;
-	}
-
-	public void setProducts(List<Product> products) {
-		this.products = products;
 	}
 
 	@Override
@@ -69,7 +66,7 @@ public class Category implements Serializable{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(id, name);
 	}
 
 	@Override
@@ -81,9 +78,7 @@ public class Category implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Category other = (Category) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(id, other.id) && Objects.equals(name, other.name);
 	}
-	
-	
 
 }
