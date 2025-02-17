@@ -9,6 +9,7 @@ import java.util.Set;
 import com.example.course.entities.enums.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -41,8 +42,7 @@ public class Order implements Serializable{
 	private User client;
 	
 	
-	@OneToOne
-	@JoinColumn(name = "payment_id")
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
 	
 	@OneToMany(mappedBy = "id.order")
