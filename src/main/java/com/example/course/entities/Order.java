@@ -33,20 +33,19 @@ public class Order implements Serializable{
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'" , timezone = "GMT")
 	private Instant moment;
-	
-	
+		
 	private Integer orderStatus;
 	
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private User client;
 	
+	@OneToMany(mappedBy = "id.order")
+	private Set<OrderItem> items = new HashSet<>();
 	
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
-	
-	@OneToMany(mappedBy = "id.order")
-	private Set<OrderItem> orders = new HashSet<>();
+
 	
 	public Order() {
 		super();
@@ -103,16 +102,20 @@ public class Order implements Serializable{
 	}
 
 	public Set<OrderItem> getOrders() {
-		return orders;
+		return items;
 	}
-
-	public void setOrders(Set<OrderItem> orders) {
-		this.orders = orders;
+	
+	public Double getTotal() {
+		double sum = 0.0;
+		for (OrderItem x : items ) {
+			sum += x.getSubTotal();
+		}
+		return sum;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, moment, orderStatus, payment, client);
+		return Objects.hash(id, moment, orderStatus, client);//payment
 	}
 
 	@Override
@@ -125,23 +128,13 @@ public class Order implements Serializable{
 			return false;
 		Order other = (Order) obj;
 		return Objects.equals(id, other.id) && Objects.equals(moment, other.moment) && orderStatus == other.orderStatus
-				&& Objects.equals(payment, other.payment) && Objects.equals(client, other.client);
+				&& Objects.equals(client, other.client);
 	}
 
 	@Override
 	public String toString() {
 		return "Order [id=" + id + ", moment=" + moment + ", orderStatus=" + orderStatus + ", client=" + client
-				+ ", payment=" + payment + "]";
+				+ "]";
 	}
-	
-	/*
-	 * public double total(){
-	 * 	double totalPrice = 0.0
-	 * 	for(OrderItem o : orders){
-	 * 		totalPrice += o.subTotal();
-	 * 	}
-	 * 	return totalPrice;
-	 * }
-	 */
 	
 }
