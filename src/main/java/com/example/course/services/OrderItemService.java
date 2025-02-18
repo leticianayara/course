@@ -1,7 +1,6 @@
 package com.example.course.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,8 +18,4 @@ public class OrderItemService {
 		return repository.findAll();
 	}
 	
-	public OrderItem findById(Long id) {
-		Optional<OrderItem> obj = repository.findById(id);
-		return obj.get();
-	}
 }
